@@ -1,65 +1,57 @@
-// script.js
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Natoli Outbound CRM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-const API_URL = "https://script.google.com/macros/s/your_script_id_here/exec";
-let contacts = JSON.parse(localStorage.getItem("NATOLI_OUTBOUND_CONTACTS_V2") || "[]");
+  <!-- POINT TO CSS IN YOUR GITHUB PAGES SITE -->
+  <link rel="stylesheet" href="/natoli-outbound-crm/style.css">
+</head>
+<body>
 
-function saveContacts() {
-  localStorage.setItem("NATOLI_OUTBOUND_CONTACTS_V2", JSON.stringify(contacts));
-}
+  <h1>Natoli Outbound CRM</h1>
+  <p>Track outbound contact activity with local save and optional Google Sheets sync.</p>
 
-function renderContacts() {
-  const table = document.querySelector("#contact-table tbody");
-  table.innerHTML = "";
-  contacts.forEach(c => {
-    const tr = document.createElement("tr");
-    tr.innerHTML = `<td>${c.first} ${c.last}</td><td>${c.email || ""}</td><td>${c.company || ""}</td><td>${c.stage || ""}</td><td>${c.sent || ""}</td>`;
-    table.appendChild(tr);
-  });
+  <div class="kpis">
+    <div class="kpi">Contacts: <strong id="kpi-contacts">0</strong></div>
+    <div class="kpi">Sent: <strong id="kpi-sent">0</strong></div>
+  </div>
 
-  document.querySelector("#kpi-contacts").textContent = contacts.length;
-  document.querySelector("#kpi-sent").textContent = contacts.filter(c => c.sent).length;
-}
+  <form id="contact-form">
+    <div class="form-row">
+      <input name="first" placeholder="First Name" required />
+      <input name="last" placeholder="Last Name" required />
+      <input name="email" placeholder="Email Address" />
+    </div>
+    <div class="form-row">
+      <input name="company" placeholder="Company" />
+      <select name="stage">
+        <option value="">Stage</option>
+        <option value="Cold">Cold</option>
+        <option value="Warm">Warm</option>
+        <option value="Hot">Hot</option>
+        <option value="Qualified">Qualified</option>
+      </select>
+      <button type="submit">Add Contact</button>
+    </div>
+    <div id="importStatus">Ready.</div>
+  </form>
 
-document.querySelector("#contact-form").addEventListener("submit", e => {
-  e.preventDefault();
-  const form = e.target;
-  const newContact = {
-    first: form.first.value,
-    last: form.last.value,
-    email: form.email.value,
-    company: form.company.value,
-    stage: form.stage.value,
-    sent: false,
-    created: new Date().toISOString()
-  };
-  contacts.push(newContact);
-  saveContacts();
-  renderContacts();
-  form.reset();
-  document.querySelector("#importStatus").textContent = "Saved locally.";
-  scheduleSync();
-});
+  <table id="contact-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Company</th>
+        <th>Stage</th>
+        <th>Sent</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-function scheduleSync() {
-  if (navigator.onLine) {
-    fetch(API_URL, {
-      method: "POST",
-      body: JSON.stringify({ contacts }),
-      headers: { "Content-Type": "application/json" }
-    })
-    .then(res => res.json())
-    .then(data => {
-      document.querySelector("#importStatus").textContent = "Synced to Google Sheets.";
-    })
-    .catch(() => {
-      document.querySelector("#importStatus").textContent = "Sync failed. Will retry.";
-    });
-  } else {
-    document.querySelector("#importStatus").textContent = "Offline – saved locally.";
-  }
-}
-
-window.addEventListener("load", () => {
-  renderContacts();
-  scheduleSync();
-});
+  <!-- 🔗 Correct script include -->
+  <script src="/natoli-outbound-crm/script.js"></script>
+</body>
+</html>
