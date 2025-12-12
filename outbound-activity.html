@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Natoli Outbound Activity - Tony Beal</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
   <style>
     :root {
       --bg: #07070a;
@@ -16,285 +16,214 @@
       --muted2: #8b91a8;
       --line: #222638;
       --accent: #e11d48;
-      --accent2: #ff3b6a;
-      --accentSoft: rgba(225, 29, 72, 0.14);
-      --good: #22c55e;
-      --warn: #fbbf24;
-      --radius: 18px;
-      --pill: 999px;
-      --shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
     }
-
-    * { box-sizing: border-box; }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top, rgba(225, 29, 72, 0.12) 0, transparent 42%),
-        radial-gradient(circle at top, #1a1c24 0, #07070a 58%, #030309 100%);
+      background: var(--bg);
       color: var(--ink);
-      padding: 2rem;
+      font-family: system-ui, sans-serif;
+      margin: 2rem;
     }
 
-    .shell {
-      max-width: 1000px;
-      margin: 0 auto;
+    h1 {
+      color: var(--accent);
     }
 
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
+    input,
+    select {
+      padding: 8px;
+      margin: 4px;
+      background: var(--bg2);
+      color: var(--ink);
+      border: 1px solid var(--line);
     }
 
-    .app-title {
-      margin: 0;
-    }
-
-    .pill {
-      background: var(--accentSoft);
-      color: var(--accent2);
-      padding: 6px 12px;
-      border-radius: var(--pill);
-      font-size: 13px;
-    }
-
-    .card {
-      background: var(--card2);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      box-shadow: var(--shadow);
-    }
-
-    .card-title {
-      margin-top: 0;
-      font-size: 1.2rem;
-      margin-bottom: 1rem;
+    button {
+      background: var(--accent);
+      color: white;
+      padding: 8px 12px;
+      border: none;
+      cursor: pointer;
+      margin-top: 8px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      margin-top: 20px;
     }
 
-    th, td {
-      text-align: left;
-      padding: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    input, select, button {
+    th,
+    td {
       padding: 8px;
-      margin: 6px 0;
-      width: 100%;
-      border-radius: 6px;
       border: 1px solid var(--line);
-      background: var(--bg2);
-      color: var(--ink);
     }
 
-    button {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      cursor: pointer;
+    th {
+      background: var(--card2);
     }
 
-    #importStatus {
-      color: var(--muted2);
-      font-size: 0.9rem;
-      margin-top: 10px;
+    tr:nth-child(even) {
+      background: var(--card);
     }
 
+    .form-container {
+      margin-bottom: 2rem;
+      padding: 1rem;
+      background: var(--card);
+    }
+
+    .kpi {
+      display: flex;
+      gap: 2rem;
+      margin: 1rem 0;
+    }
+
+    .kpi div {
+      background: var(--card2);
+      padding: 1rem;
+    }
+
+    .success {
+      color: limegreen;
+      font-weight: bold;
+    }
   </style>
 </head>
+
 <body>
-  <div class="shell">
-    <div class="top-bar">
-      <div>
-        <h1 class="app-title">Natoli Outbound Activity</h1>
-        <p class="app-subtitle">
-          Contact capture, send tracking, weekly output, and account rollups for outbound control
-        </p>
-      </div>
-      <span class="pill">Outbound CRM Lite</span>
-    </div>
+  <h1>Outbound CRM Activity</h1>
 
-    <!-- Contact Form -->
-    <div class="card">
-      <h2 class="card-title">Add New Contact</h2>
-      <form id="contact-form">
-        <input type="text" name="first" placeholder="First Name" required />
-        <input type="text" name="last" placeholder="Last Name" required />
-        <input type="email" name="email" placeholder="Email Address" />
-        <input type="text" name="company" placeholder="Company" />
-        <select name="stage">
-          <option value="">-- Stage --</option>
-          <option value="New">New</option>
-          <option value="Contacted">Contacted</option>
-          <option value="Qualified">Qualified</option>
-          <option value="Converted">Converted</option>
-        </select>
-        <button type="submit">Save Contact</button>
-      </form>
-      <div id="importStatus"></div>
-    </div>
-
-    <!-- Contact Table -->
-    <div class="card">
-      <h2 class="card-title">Stored Contacts</h2>
-      <table id="contact-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Company</th>
-            <th>Stage</th>
-            <th>Sent</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-
-    <!-- Google Sheet Synced Display -->
-    <div class="card">
-      <h2 class="card-title">Google Sheet: Synced Records</h2>
-      <div id="sheetData" style="padding: 1rem; color: var(--muted);">Loading Google Sheet data…</div>
-    </div>
+  <div class="kpi">
+    <div><strong>Sent Today:</strong> <span id="sentToday">0</span></div>
+    <div><strong>Total Sent:</strong> <span id="sentTotal">0</span></div>
   </div>
 
-  <!-- Core Script -->
+  <div class="form-container">
+    <h3>Add or Update Contact</h3>
+    <form id="contactForm">
+      <input placeholder="First Name" name="firstName" required />
+      <input placeholder="Last Name" name="lastName" required />
+      <input placeholder="Title" name="title" />
+      <input placeholder="Company" name="company" />
+      <input placeholder="Email" name="email" />
+      <input placeholder="Phone" name="phone" />
+      <input placeholder="Industry" name="industry" />
+      <input placeholder="LinkedIn" name="linkedin" />
+      <select name="stage">
+        <option>Interested</option>
+        <option>Follow-up</option>
+        <option>Closed</option>
+      </select>
+      <input placeholder="Next Step" name="nextStep" />
+      <input placeholder="Notes" name="notes" />
+      <input type="hidden" name="id" />
+      <button type="submit">Save</button>
+    </form>
+    <p id="status"></p>
+  </div>
+
+  <h3>Activity Log</h3>
+  <table id="contactsTable">
+    <thead>
+      <tr>
+        <th>First</th>
+        <th>Last</th>
+        <th>Company</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Stage</th>
+        <th>Next</th>
+        <th>Notes</th>
+        <th>Sent</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbzqEX5U6-AsQxYzqunUOKwp0wLbyrK6Jr20Vb0XopHMmn3oN_rgd7nkRiVydS9ezznC2g/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbyJQbkPOlzHP-ipGgja7-g-xOrULcEit9aC8Bz_K_2YY2G33KdXP411dhdET6l71U9EsQ/exec";
 
-    let contacts = JSON.parse(localStorage.getItem("NATOLI_OUTBOUND_CONTACTS_V2") || "[]");
+    let contacts = JSON.parse(localStorage.getItem("contacts") || "[]");
 
-    function saveContacts() {
-      localStorage.setItem("NATOLI_OUTBOUND_CONTACTS_V2", JSON.stringify(contacts));
-    }
+    const form = document.getElementById("contactForm");
+    const status = document.getElementById("status");
+    const table = document.querySelector("#contactsTable tbody");
 
-    function renderContacts() {
-      const table = document.querySelector("#contact-table tbody");
+    const refreshTable = () => {
       table.innerHTML = "";
-      contacts.forEach(c => {
+      contacts.forEach((c, i) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${c.first || ""} ${c.last || ""}</td>
-          <td>${c.email || ""}</td>
-          <td>${c.company || ""}</td>
-          <td>${c.stage || ""}</td>
-          <td>${c.sent ? "✔️" : ""}</td>
+          <td>${c.firstName}</td>
+          <td>${c.lastName}</td>
+          <td>${c.company}</td>
+          <td>${c.email}</td>
+          <td>${c.phone}</td>
+          <td>${c.stage}</td>
+          <td>${c.nextStep}</td>
+          <td>${c.notes}</td>
+          <td>${c.sent ? "✅" : ""}</td>
+          <td><button onclick="edit(${i})">Edit</button></td>
         `;
         table.appendChild(tr);
       });
-    }
 
-    document.querySelector("#contact-form").addEventListener("submit", e => {
-      e.preventDefault();
-      const form = e.target;
-      const newContact = {
-        first: form.first.value,
-        last: form.last.value,
-        email: form.email.value,
-        company: form.company.value,
-        stage: form.stage.value,
-        sent: false,
-        created: new Date().toISOString()
-      };
-      contacts.push(newContact);
-      saveContacts();
-      renderContacts();
-      form.reset();
-      document.querySelector("#importStatus").textContent = "Saved locally.";
-      scheduleSync();
-    });
+      const today = new Date().toISOString().slice(0, 10);
+      document.getElementById("sentToday").textContent = contacts.filter(c => c.sentDate === today).length;
+      document.getElementById("sentTotal").textContent = contacts.filter(c => c.sent).length;
+    };
 
-    function scheduleSync() {
-      if (navigator.onLine) {
-        fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ contacts }),
-          headers: { "Content-Type": "application/json" }
-        })
-        .then(res => res.json())
-        .then(data => {
-          document.querySelector("#importStatus").textContent = "Synced to Google Sheets.";
-          contacts.forEach(c => c.sent = true);
-          saveContacts();
-          renderContacts();
-        })
-        .catch(() => {
-          document.querySelector("#importStatus").textContent = "Sync failed. Will retry.";
-        });
-      } else {
-        document.querySelector("#importStatus").textContent = "Offline – saved locally.";
-      }
-    }
-
-    window.addEventListener("load", () => {
-      renderContacts();
-      scheduleSync();
-    });
-
-    // Display Google Sheet Records
-    fetch(API_URL)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("sheetData");
-        if (!Array.isArray(data) || data.length === 0) {
-          container.innerHTML = "<p>No data found in Google Sheet.</p>";
-          return;
+    const edit = (index) => {
+      const c = contacts[index];
+      for (const el of form.elements) {
+        if (el.name && c[el.name] !== undefined) {
+          el.value = c[el.name];
         }
+      }
+    };
 
-        const table = document.createElement("table");
-        table.style.width = "100%";
-        table.style.borderCollapse = "collapse";
-        table.style.marginTop = "12px";
-
-        const thead = document.createElement("thead");
-        const tbody = document.createElement("tbody");
-
-        const headers = Object.keys(data[0] || {});
-        const headerRow = document.createElement("tr");
-        headers.forEach(key => {
-          const th = document.createElement("th");
-          th.textContent = key;
-          th.style.textAlign = "left";
-          th.style.padding = "8px 10px";
-          th.style.borderBottom = "1px solid rgba(255,255,255,0.12)";
-          th.style.textTransform = "uppercase";
-          th.style.fontSize = "11px";
-          headerRow.appendChild(th);
+    const sheetsUpsert = async (contact) => {
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          body: JSON.stringify({ items: [contact] }),
+          headers: { "Content-Type": "application/json" }
         });
-        thead.appendChild(headerRow);
+        const data = await res.json();
+        if (data.ok) {
+          console.log("Synced to Sheets");
+        }
+      } catch (err) {
+        console.error("Sheets sync failed", err);
+      }
+    };
 
-        data.forEach(row => {
-          const tr = document.createElement("tr");
-          headers.forEach(key => {
-            const td = document.createElement("td");
-            td.textContent = row[key] ?? "";
-            td.style.padding = "8px 10px";
-            td.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const contact = Object.fromEntries(new FormData(form));
+      contact.updatedAt = new Date().toISOString().slice(0, 10);
+      if (!contact.id) {
+        contact.id = Math.random().toString(36).slice(2);
+        contact.createdAt = contact.updatedAt;
+        contact.sent = true;
+        contact.sentDate = contact.updatedAt;
+        contacts.push(contact);
+      } else {
+        const idx = contacts.findIndex(c => c.id === contact.id);
+        contacts[idx] = { ...contacts[idx], ...contact };
+      }
+      localStorage.setItem("contacts", JSON.stringify(contacts));
+      form.reset();
+      status.textContent = "Saved!";
+      setTimeout(() => status.textContent = "", 1500);
+      refreshTable();
+      await sheetsUpsert(contact);
+    };
 
-        table.appendChild(thead);
-        table.appendChild(tbody);
-
-        container.innerHTML = "";
-        container.appendChild(table);
-      })
-      .catch(err => {
-        console.error("Sheet fetch failed:", err);
-        document.getElementById("sheetData").innerHTML = "<p>Failed to load Google Sheet data.</p>";
-      });
+    refreshTable();
   </script>
 </body>
+
 </html>
