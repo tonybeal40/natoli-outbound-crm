@@ -1,0 +1,54 @@
+<!-- outbound-activity.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Natoli Outbound Activity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-bar">
+      <div>
+        <h1 class="app-title">Natoli Outbound Activity</h1>
+        <p class="app-subtitle">Contact capture, send tracking, weekly output, and account rollups for outbound control</p>
+      </div>
+      <span class="pill">Outbound CRM Lite</span>
+    </div>
+
+    <section class="kpi-strip" aria-label="KPIs">
+      <!-- Example KPI cards -->
+      <div class="kpi"><span>Contacts</span><strong id="kpi-contacts">0</strong></div>
+      <div class="kpi"><span>Sends</span><strong id="kpi-sent">0</strong></div>
+      <div class="kpi"><span>Weekly Target</span><strong id="kpi-target">0</strong></div>
+    </section>
+
+    <div class="grid">
+      <!-- Add contact form -->
+      <form id="contact-form">
+        <input name="first" placeholder="First Name" required />
+        <input name="last" placeholder="Last Name" />
+        <input name="company" placeholder="Company" />
+        <input name="email" placeholder="Email" type="email" />
+        <input name="stage" placeholder="Stage (e.g. new, sent, followup)" />
+        <button type="submit">Add Contact</button>
+      </form>
+
+      <!-- Contacts Table -->
+      <table id="contact-table">
+        <thead>
+          <tr>
+            <th>Name</th><th>Email</th><th>Company</th><th>Stage</th><th>Sent</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <!-- Sync Status -->
+      <p id="importStatus" style="color: #aaa; margin-top: 1rem;"></p>
+    </div>
+  </div>
+</body>
+</html>
