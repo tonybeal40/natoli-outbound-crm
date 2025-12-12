@@ -1,57 +1,120 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Natoli Outbound CRM</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+/* BASE UI STYLES */
 
-  <!-- POINT TO CSS IN YOUR GITHUB PAGES SITE -->
-  <link rel="stylesheet" href="/natoli-outbound-crm/style.css">
-</head>
-<body>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0c0c0f;
+  color: #f5f5f5;
+}
 
-  <h1>Natoli Outbound CRM</h1>
-  <p>Track outbound contact activity with local save and optional Google Sheets sync.</p>
+a {
+  color: #f5f5f5;
+  text-decoration: none;
+}
 
-  <div class="kpis">
-    <div class="kpi">Contacts: <strong id="kpi-contacts">0</strong></div>
-    <div class="kpi">Sent: <strong id="kpi-sent">0</strong></div>
-  </div>
+/* NAVIGATION */
 
-  <form id="contact-form">
-    <div class="form-row">
-      <input name="first" placeholder="First Name" required />
-      <input name="last" placeholder="Last Name" required />
-      <input name="email" placeholder="Email Address" />
-    </div>
-    <div class="form-row">
-      <input name="company" placeholder="Company" />
-      <select name="stage">
-        <option value="">Stage</option>
-        <option value="Cold">Cold</option>
-        <option value="Warm">Warm</option>
-        <option value="Hot">Hot</option>
-        <option value="Qualified">Qualified</option>
-      </select>
-      <button type="submit">Add Contact</button>
-    </div>
-    <div id="importStatus">Ready.</div>
-  </form>
+.nav {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #111;
+}
 
-  <table id="contact-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Company</th>
-        <th>Stage</th>
-        <th>Sent</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+.nav a {
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  background: #1a1a1f;
+  transition: 0.2s;
+}
+.nav a:hover {
+  background: #28141f;
+}
 
-  <!-- 🔗 Correct script include -->
-  <script src="/natoli-outbound-crm/script.js"></script>
-</body>
-</html>
+/* CONTAINERS */
+
+.container {
+  padding: 1.5rem;
+}
+
+/* KPI STRIP */
+
+.kpi-strip {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-bottom: 1.5rem;
+}
+.kpi {
+  background: #111;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+.kpi-label {
+  font-size: 0.9rem;
+  color: #aaa;
+}
+.kpi-value {
+  font-size: 1.8rem;
+  margin-top: 0.4rem;
+  font-weight: bold;
+  color: #ff3b6a;
+}
+
+/* FORMS */
+
+.form-section {
+  background: #111;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+.form-row {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  margin-bottom: 0.8rem;
+}
+input, select {
+  padding: 10px;
+  border: 1px solid #222;
+  background: #0d0d10;
+  color: #eee;
+  border-radius: 6px;
+}
+.btn-save {
+  background: #e11d48;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* TABLE */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 0.6rem;
+  border-bottom: 1px solid #222;
+}
+th {
+  background: #111;
+  text-align: left;
+}
+tbody tr:hover {
+  background: #16161a;
+}
+
+/* CHART SECTION */
+
+.chart-section {
+  background: #111;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
