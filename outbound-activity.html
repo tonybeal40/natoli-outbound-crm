@@ -1,229 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Natoli Outbound Activity - Tony Beal</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #07070a;
-      --bg2: #0e0f14;
-      --card: #0f1118;
-      --card2: #121521;
-      --ink: #f5f7ff;
-      --muted: #b1b6c8;
-      --muted2: #8b91a8;
-      --line: #222638;
-      --accent: #e11d48;
-    }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: system-ui, sans-serif;
-      margin: 2rem;
-    }
-
-    h1 {
-      color: var(--accent);
-    }
-
-    input,
-    select {
-      padding: 8px;
-      margin: 4px;
-      background: var(--bg2);
-      color: var(--ink);
-      border: 1px solid var(--line);
-    }
-
-    button {
-      background: var(--accent);
-      color: white;
-      padding: 8px 12px;
-      border: none;
-      cursor: pointer;
-      margin-top: 8px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th,
-    td {
-      padding: 8px;
-      border: 1px solid var(--line);
-    }
-
-    th {
-      background: var(--card2);
-    }
-
-    tr:nth-child(even) {
-      background: var(--card);
-    }
-
-    .form-container {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background: var(--card);
-    }
-
-    .kpi {
-      display: flex;
-      gap: 2rem;
-      margin: 1rem 0;
-    }
-
-    .kpi div {
-      background: var(--card2);
-      padding: 1rem;
-    }
-
-    .success {
-      color: limegreen;
-      font-weight: bold;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Outbound Activity</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
-  <h1>Outbound CRM Activity</h1>
+  <header class="nav">
+    <a href="index.html">Dashboard</a>
+    <a href="outbound-activity.html">Outbound Activity</a>
+  </header>
 
-  <div class="kpi">
-    <div><strong>Sent Today:</strong> <span id="sentToday">0</span></div>
-    <div><strong>Total Sent:</strong> <span id="sentTotal">0</span></div>
-  </div>
+  <main class="container">
+    <h1>Outbound Activity</h1>
 
-  <div class="form-container">
-    <h3>Add or Update Contact</h3>
-    <form id="contactForm">
-      <input placeholder="First Name" name="firstName" required />
-      <input placeholder="Last Name" name="lastName" required />
-      <input placeholder="Title" name="title" />
-      <input placeholder="Company" name="company" />
-      <input placeholder="Email" name="email" />
-      <input placeholder="Phone" name="phone" />
-      <input placeholder="Industry" name="industry" />
-      <input placeholder="LinkedIn" name="linkedin" />
-      <select name="stage">
-        <option>Interested</option>
-        <option>Follow-up</option>
-        <option>Closed</option>
-      </select>
-      <input placeholder="Next Step" name="nextStep" />
-      <input placeholder="Notes" name="notes" />
-      <input type="hidden" name="id" />
-      <button type="submit">Save</button>
-    </form>
-    <p id="status"></p>
-  </div>
+    <section class="form-section">
+      <form id="contact-form">
+        <div class="form-row">
+          <input type="text" name="firstName" placeholder="First Name" required>
+          <input type="text" name="lastName" placeholder="Last Name">
+        </div>
+        <div class="form-row">
+          <input type="email" name="email" placeholder="Email">
+          <input type="text" name="company" placeholder="Company">
+        </div>
+        <div class="form-row">
+          <input type="text" name="phone" placeholder="Phone">
+          <input type="text" name="industry" placeholder="Industry">
+        </div>
+        <div class="form-row">
+          <input type="text" name="linkedin" placeholder="LinkedIn URL">
+          <select name="stage">
+            <option value="">Stage</option>
+            <option value="New">New</option>
+            <option value="Contacted">Contacted</option>
+            <option value="Qualified">Qualified</option>
+            <option value="Closed">Closed</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <input type="text" name="nextStep" placeholder="Next Step">
+          <input type="text" name="notes" placeholder="Notes">
+        </div>
+        <button type="submit" class="btn-save">Add Contact</button>
+      </form>
+      <div id="status"></div>
+    </section>
 
-  <h3>Activity Log</h3>
-  <table id="contactsTable">
-    <thead>
-      <tr>
-        <th>First</th>
-        <th>Last</th>
-        <th>Company</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Stage</th>
-        <th>Next</th>
-        <th>Notes</th>
-        <th>Sent</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <section class="table-section">
+      <table id="contacts-table">
+        <thead>
+          <tr>
+            <th>First</th><th>Last</th><th>Email</th><th>Company</th><th>Stage</th><th>Notes</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
 
-  <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyJQbkPOlzHP-ipGgja7-g-xOrULcEit9aC8Bz_K_2YY2G33KdXP411dhdET6l71U9EsQ/exec";
+  </main>
 
-    let contacts = JSON.parse(localStorage.getItem("contacts") || "[]");
-
-    const form = document.getElementById("contactForm");
-    const status = document.getElementById("status");
-    const table = document.querySelector("#contactsTable tbody");
-
-    const refreshTable = () => {
-      table.innerHTML = "";
-      contacts.forEach((c, i) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${c.firstName}</td>
-          <td>${c.lastName}</td>
-          <td>${c.company}</td>
-          <td>${c.email}</td>
-          <td>${c.phone}</td>
-          <td>${c.stage}</td>
-          <td>${c.nextStep}</td>
-          <td>${c.notes}</td>
-          <td>${c.sent ? "✅" : ""}</td>
-          <td><button onclick="edit(${i})">Edit</button></td>
-        `;
-        table.appendChild(tr);
-      });
-
-      const today = new Date().toISOString().slice(0, 10);
-      document.getElementById("sentToday").textContent = contacts.filter(c => c.sentDate === today).length;
-      document.getElementById("sentTotal").textContent = contacts.filter(c => c.sent).length;
-    };
-
-    const edit = (index) => {
-      const c = contacts[index];
-      for (const el of form.elements) {
-        if (el.name && c[el.name] !== undefined) {
-          el.value = c[el.name];
-        }
-      }
-    };
-
-    const sheetsUpsert = async (contact) => {
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          body: JSON.stringify({ items: [contact] }),
-          headers: { "Content-Type": "application/json" }
-        });
-        const data = await res.json();
-        if (data.ok) {
-          console.log("Synced to Sheets");
-        }
-      } catch (err) {
-        console.error("Sheets sync failed", err);
-      }
-    };
-
-    form.onsubmit = async (e) => {
-      e.preventDefault();
-      const contact = Object.fromEntries(new FormData(form));
-      contact.updatedAt = new Date().toISOString().slice(0, 10);
-      if (!contact.id) {
-        contact.id = Math.random().toString(36).slice(2);
-        contact.createdAt = contact.updatedAt;
-        contact.sent = true;
-        contact.sentDate = contact.updatedAt;
-        contacts.push(contact);
-      } else {
-        const idx = contacts.findIndex(c => c.id === contact.id);
-        contacts[idx] = { ...contacts[idx], ...contact };
-      }
-      localStorage.setItem("contacts", JSON.stringify(contacts));
-      form.reset();
-      status.textContent = "Saved!";
-      setTimeout(() => status.textContent = "", 1500);
-      refreshTable();
-      await sheetsUpsert(contact);
-    };
-
-    refreshTable();
-  </script>
+  <script src="js/script-outbound.js"></script>
 </body>
-
 </html>
